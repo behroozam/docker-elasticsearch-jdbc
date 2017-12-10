@@ -1,39 +1,15 @@
 version: '2'
 services:
-  nginx:
-    image: 'nginx:1.13'
-    ports:
-      - '9010:80'
-    depends_on:
-      - php-fpm
-    volumes:
-      - './nginx/site.conf:/etc/nginx/conf.d/default.conf'
-      - './code:/code'
-    networks:
-      - code-network
+
   php-fpm:
     build: php/
     volumes:
       - './php/php.ini:/usr/local/etc/php/php.ini'
       - './php/phperror.log:/var/log/phperror.log'
-      - './code:/code'
       - './php/log.conf:/usr/local/etc/php-fpm.d/zz-log.conf'
     networks:
       - code-network
-    working_dir: /code
-  nodejs:
-    build: nodejs/
-    volumes:
-      - './code:/code'
-    networks:
-      - code-network
-    working_dir: /code
-  composer:
-    build: composer/
-    volumes:
-      - './code:/code'
-      - './composer/cache:/root/.composer/cache'
-    working_dir: /code
+
   mysql:
     hostname: db
     image: 'mariadb:10.3'
